@@ -32,9 +32,9 @@ def index():
 #def saludar_persona(usuario):
     #return render_template('usuarios.html', nombre=usuario)
 
-@app.route('/sobre')
+@app.route('/sobre')       # Creo la ruta '/sobre'
 def sobre():
-    return render_template('sobre.html')
+    return render_template('sobre.html')   # Defino una funcion que retorne la plantilla rederizada
 
 
 @app.route('/clientes', methods=['GET'])
