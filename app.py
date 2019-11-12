@@ -32,17 +32,17 @@ def index():
 #def saludar_persona(usuario):
     #return render_template('usuarios.html', nombre=usuario)
 
-@app.route('/sobre')       # Creo la ruta '/sobre'
+@app.route('/sobre')       # Creo la ruta '/sobre'.
 def sobre():
-    return render_template('sobre.html')   # Defino una funcion que retorne la plantilla rederizada
+    return render_template('sobre.html')   # Defino una funcion que retorne la plantilla renderizada.
 
 
-@app.route('/clientes', methods=['GET'])
-def clientes():
-    with open("clientes") as f:
-        reader = csv.reader(f)
-        vercontenido = list(reader)
-        return render_template("clientes.html", tabla=vercontenido)
+@app.route('/clientes', methods=['GET']) # Creo la ruta '/clientes'.
+def clientes():                          # Defino la funcion clientes().
+    with open("clientes") as f:          # Abro el archivo en modo w.
+        reader = csv.reader(f)           # Creo la variable reader y le asigno = csv.reader(f).
+        vercontenido = list(reader)      # Creo la variable vercontenido asignandole = list(reader).
+        return render_template("clientes.html", tabla=vercontenido)   # Le digo que retorne la plantilla renderizada en forma de tabla.
 
 
 
