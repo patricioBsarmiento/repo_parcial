@@ -2,14 +2,20 @@
 import csv
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, session, request
 from flask_bootstrap import Bootstrap
 
-from forms import LoginForm, SaludarForm, RegistrarForm
+
+from forms import LoginForm, SaludarForm, RegistrarForm, ConsultaPaisForm
+
 
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
+
+
+
+
 
 app.config['SECRET_KEY'] = 'un string que funcione como llave'
 
@@ -39,7 +45,7 @@ def sobre():
 
 @app.route('/clientes', methods=['GET']) # Creo la ruta '/clientes'.
 def clientes():                          # Defino la funcion clientes().
-    with open("clientes") as f:          # Abro el archivo en modo w.
+    with open("clientes", encoding="utf-8") as f:          # Abro el archivo en modo w.
         reader = csv.reader(f)           # Creo la variable reader y le asigno = csv.reader(f).
         vercontenido = list(reader)      # Creo la variable vercontenido asignandole = list(reader).
         return render_template("clientes.html", tabla=vercontenido)   # Le digo que retorne la plantilla renderizada en forma de tabla.
@@ -89,6 +95,33 @@ def registrar():
         else:
             flash('Las passwords no matchean')
     return render_template('registrar.html', form=formulario)
+
+
+
+@app.route('/buscarporpais')
+def busquedaporpais():
+    if 'username' in session:
+        pais = request.args.get("pais")
+        if pais:
+            rows = []
+            with open("clientes", encoding="utf-8") as archivo:
+                archivo_csv = csv.reader(archivo)
+                headers = next(archivo_csv)
+                registro = next(archivo_csv, None)
+                paisarg = str(pais).lower()
+                while registro:
+                    reg = str(registro[3]).lower()
+                    if paisarg in reg:
+                        rows.append(registro)
+                    registro = next(archivo_csv, None)
+                if len(rows) < 1:
+                    flash('No se encontraron registros relacionados a la búsqueda.')
+                return render_template("busquedaporpais.html", headers = headers, rows = rows)
+        return render_template("busquedaporpais.html")
+    return redirect(url_for('ingresar'))
+
+
+
 
 
 @app.route('/secret', methods=['GET'])
